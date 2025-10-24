@@ -1,0 +1,57 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Yellow Background -->
+  <rect width="1024" height="1024" fill="#FDB82A"/>
+  
+  <!-- Red rounded rectangle (left part of K) -->
+  <path d="M 120 120 
+           C 120 120 120 120 120 120
+           L 424 120
+           C 456 120 456 120 456 152
+           L 456 872
+           C 456 904 456 904 424 904
+           L 152 904
+           C 120 904 120 904 120 872
+           Z" 
+        fill="#E21D22"/>
+  
+  <!-- Red rounded rectangle (right part) -->
+  <path d="M 568 120
+           L 872 120
+           C 904 120 904 120 904 152
+           L 904 872
+           C 904 904 904 904 872 904
+           L 600 904
+           C 568 904 568 904 568 872
+           Z"
+        fill="#E21D22"/>
+  
+  <!-- Diagonal yellow stripe creating the K -->
+  <path d="M 190 220
+           L 424 120
+           L 500 280
+           L 190 500
+           Z"
+        fill="#FDB82A"/>
+  
+  <path d="M 190 550
+           L 500 720
+           L 424 904
+           L 150 770
+           Z"
+        fill="#FDB82A"/>
+  
+  <!-- T -->
+  <text x="725" y="280" font-family="Arial Black, Arial, sans-serif" font-size="120" font-weight="900" fill="#FDB82A" text-anchor="middle">T</text>
+  
+  <!-- E -->
+  <text x="725" y="410" font-family="Arial Black, Arial, sans-serif" font-size="120" font-weight="900" fill="#FDB82A" text-anchor="middle">E</text>
+  
+  <!-- M -->
+  <text x="725" y="560" font-family="Arial Black, Arial, sans-serif" font-size="130" font-weight="900" fill="#FDB82A" text-anchor="middle">M</text>
+  
+  <!-- P -->
+  <text x="725" y="700" font-family="Arial Black, Arial, sans-serif" font-size="130" font-weight="900" fill="#FDB82A" text-anchor="middle">P</text>
+  
+  <!-- O -->
+  <text x="725" y="840" font-family="Arial Black, Arial, sans-serif" font-size="130" font-weight="900" fill="#FDB82A" text-anchor="middle">O</text>
+</svg>
