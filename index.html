@@ -1,13 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/tempo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>linha-do-tempo</title>
-  </head>
+    <title>Nas Decadas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Caveat:wght@700&family=Permanent+Marker&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --vintage-cream: #f3ebd7;
+        --vintage-white: #f7efd5;
+        --dark-brown: #5A4A3E;
+        --forest-green: #2F4F4F;
+        --burgundy: #8B0000;
+        --burnt-orange: #D2691E;
+        --dark-gray: #333333;
+      }
+      
+      body {
+        font-family: 'PT Sans', sans-serif;
+        background-color: var(--vintage-cream);
+        color: var(--dark-brown);
+      }
+      
+      .font-caveat {
+        font-family: 'Caveat', serif;
+        font-weight: 700;
+      }
+      
+      .font-permanent-marker {
+        font-family: 'Permanent Marker', cursive;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.14.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.1/",
+    "react/": "https://esm.sh/react@^19.1.1/",
+    "react": "https://esm.sh/react@^19.1.1",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@^3.3.1",
+    "framer-motion": "https://esm.sh/framer-motion@^12.23.12",
+    "clsx": "https://esm.sh/clsx@^2.1.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/src/index.css">
+</head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
