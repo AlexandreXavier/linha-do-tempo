@@ -39,7 +39,7 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
     // 2. Desenha o título
     ctx.fillStyle = '#333';
     ctx.textAlign = 'center';
-    ctx.font = `bold 100px 'Caveat', cursive`;
+    ctx.font = `bold 150px 'Caveat', cursive`;
     ctx.fillText('Viagem ao Passado', canvasWidth / 2, 150);
 
     // 3. Carrega todas as imagens de polaroid de forma concorrente

@@ -14,6 +14,7 @@ import {
   useAnimationControls,
   type PanInfo,
 } from "framer-motion";
+
  
 export const DraggableCardBody = ({
   className,
@@ -46,6 +47,7 @@ export const DraggableCardBody = ({
     useTransform(mouseY, [-300, 300], [25, -25]),
     springConfig,
   );
+  
   const rotateY = useSpring(
     useTransform(mouseX, [-300, 300], [-25, 25]),
     springConfig,
