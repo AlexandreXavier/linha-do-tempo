@@ -6,7 +6,7 @@
 function loadImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
         const img = new Image();
-        // Setting crossOrigin is good practice for canvas operations, even with data URLs
+        // Configure crossOrigin para operações de canvas, mesmo com URLs de dados
         img.crossOrigin = 'anonymous';
         img.onload = () => resolve(img);
         img.onerror = (_err) => reject(new Error(`Failed to load image: ${src.substring(0, 50)}...`));
@@ -39,10 +39,8 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
     // 2. Desenha o título
     ctx.fillStyle = '#333';
     ctx.textAlign = 'center';
-
     ctx.font = `bold 100px 'Caveat', cursive`;
-    ctx.fillText('Um Album de Decadas', canvasWidth / 2, 150);
-
+    ctx.fillText('Viagem ao Passado', canvasWidth / 2, 150);
 
     // 3. Carrega todas as imagens de polaroid de forma concorrente
     const decades = Object.keys(imageData);
@@ -56,9 +54,9 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
     }));
 
     // 4. Define a grid layout e desenha cada polaroid
-    const grid = { cols: 3, rows: 4 };
-    const padding = 50; // Reduzir o espaçamento entre os polaoids
-    const contentTopMargin = 150; // Aumentar o espaçamento superior para melhor espaçamento
+    const grid = { cols: 2, rows: 4 };
+    const padding = 10; // Reduzir o espaçamento entre os polaoids
+    const contentTopMargin = 350; // Aumentar o espaçamento superior para melhor espaçamento
     const contentHeight = canvasHeight - contentTopMargin;
     
     //Calcula as dimensões da célula com uma margem reduzida
@@ -154,6 +152,20 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
         
         ctx.restore(); // Restaura o contexto para o estado pré-transformação
     });
+
+
+
+
+    // Add a semi-transparent background
+ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+ctx.fillRect(canvasWidth - 200, canvasHeight - 40, 180, 30);
+
+// Add the text
+ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+ctx.font = 'bold 28px Arial';
+ctx.textAlign = 'right';
+ctx.textBaseline = 'middle';
+ctx.fillText('© ' + new Date().getFullYear() + ' - Xani', canvasWidth - 20, canvasHeight - 25);
 
     // Converte o canvas para uma imagem JPEG de alta qualidade e retorna a URL de dados
     return canvas.toDataURL('image/jpeg', 0.9);

@@ -45,7 +45,6 @@ const Placeholder = () => (
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
         <span className="font-permanent-marker text-xl text-[#5A4A3E]">A tua Foto</span>
-        <span className="font-permanent-marker text-sm text-[#D2691E] mt-2">CLICK</span>
     </div>
 );
 

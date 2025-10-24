@@ -10,7 +10,8 @@ import { createAlbumPage } from './lib/albumUtils';
 import Footer from './components/Footer';
 
 //const DECADES = ['1840', '1880', '1900', '1920', '1940', '1960', '1970', '1980', '1990', '2000', '2020', '2040'];
-const DECADES = ['1800', '1840','1920', '1950', '1960', '1970', '1980', '1990','2000'];
+//const DECADES = ['1500', '1740','1920', '1950', '1960', '1970', '1980', '1990','2000'];
+const DECADES = ['1950', '1960','1970', '1980', '1990','2000'];
 
 // Posições otimizadas para 12 fotos em 4 linhas de 3 colunas
 const POSITIONS = [
@@ -62,7 +63,6 @@ interface GeneratedImage {
     url?: string;
     error?: string;
 }
-
 
 
 const primaryButtonClasses = "font-permanent-marker text-lg text-center text-white bg-[#D2691E] py-3 px-8 rounded-sm transform transition-all duration-200 hover:scale-105 hover:-rotate-1 hover:bg-[#C25A1A] shadow-[3px_3px_0px_rgba(0,0,0,0.3)]";
