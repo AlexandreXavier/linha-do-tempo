@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
 */
-import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
+import { useState, type ChangeEvent, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { generateDecadeImage } from './services/geminiService';
 import PolaroidCard from './components/PolaroidCard';
@@ -63,6 +63,8 @@ interface GeneratedImage {
     error?: string;
 }
 
+
+
 const primaryButtonClasses = "font-permanent-marker text-lg text-center text-white bg-[#D2691E] py-3 px-8 rounded-sm transform transition-all duration-200 hover:scale-105 hover:-rotate-1 hover:bg-[#C25A1A] shadow-[3px_3px_0px_rgba(0,0,0,0.3)]";
 const secondaryButtonClasses = "font-permanent-marker text-lg text-center text-[#5A4A3E] bg-[#F8F4E3] border-2 border-[#5A4A3E] py-3 px-8 rounded-sm transform transition-all duration-200 hover:scale-105 hover:rotate-1 hover:bg-[#FCF8EC] shadow-[2px_2px_0px_rgba(0,0,0,0.2)]";
 
@@ -83,11 +85,11 @@ const useMediaQuery = (query: string) => {
 function App() {
     const [uploadedImage, setUploadedImage] = useState<string | null>(null);
     const [generatedImages, setGeneratedImages] = useState<Record<string, GeneratedImage>>({});
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [_isLoading, setIsLoading] = useState<boolean>(false);
     const [isDownloading, setIsDownloading] = useState<boolean>(false);
     const [appState, setAppState] = useState<'idle' | 'image-uploaded' | 'generating' | 'results-shown'>('idle');
-    const dragAreaRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery('(max-width: 768px)');
+    const dragAreaRef = useRef<HTMLDivElement>(null);
 
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -341,7 +343,8 @@ function App() {
                                             transition={{ type: 'spring', stiffness: 100, damping: 20, delay: index * 0.15 }}
                                         >
                                             <PolaroidCard 
-                                                dragConstraintsRef={dragAreaRef}
+                                                // In App.tsx, when using the ref
+                                                dragConstraintsRef={dragAreaRef as React.RefObject<HTMLElement>}
                                                 caption={decade}
                                                 status={generatedImages[decade]?.status || 'pending'}
                                                 imageUrl={generatedImages[decade]?.url}

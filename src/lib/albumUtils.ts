@@ -9,7 +9,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
         // Setting crossOrigin is good practice for canvas operations, even with data URLs
         img.crossOrigin = 'anonymous';
         img.onload = () => resolve(img);
-        img.onerror = (err) => reject(new Error(`Failed to load image: ${src.substring(0, 50)}...`));
+        img.onerror = (_err) => reject(new Error(`Failed to load image: ${src.substring(0, 50)}...`));
         img.src = src;
     });
 }

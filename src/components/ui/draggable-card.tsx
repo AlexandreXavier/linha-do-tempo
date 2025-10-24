@@ -102,7 +102,7 @@ export const DraggableCardBody = ({
         });
         onDragStart?.(event, info);
       }}
-      onDragEnd={(event, info) => {
+      onDragEnd={(_event, info) => {
         document.body.style.cursor = "default";
  
         const currentVelocityX = velocityX.get();
@@ -116,8 +116,7 @@ export const DraggableCardBody = ({
  
         animate(info.point.x, info.point.x + currentVelocityX * 0.3, {
           duration: 0.8,
-          // @ts-ignore
-          ease: [0.2, 0, 0, 1],
+          ease: [0.2, 0, 0, 1] as [number, number, number, number],
           bounce,
           type: "spring",
           stiffness: 50,
@@ -127,8 +126,7 @@ export const DraggableCardBody = ({
  
         animate(info.point.y, info.point.y + currentVelocityY * 0.3, {
           duration: 0.8,
-          // @ts-ignore
-          ease: [0.2, 0, 0, 1],
+          ease: [0.2, 0, 0, 1] as [number, number, number, number],
           bounce,
           type: "spring",
           stiffness: 50,
