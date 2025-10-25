@@ -54,30 +54,37 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
     }));
 
     // 4. Define a grid layout e desenha cada polaroid
-    const grid = { cols: 2, rows: 4 };
-    const padding = 10; // Reduzir o espaçamento entre os polaoids
-    const contentTopMargin = 350; // Aumentar o espaçamento superior para melhor espaçamento
-    const contentHeight = canvasHeight - contentTopMargin;
-    
-    //Calcula as dimensões da célula com uma margem reduzida
+    const grid = { 
+        cols: 2, 
+        rows: Math.ceil(imagesWithDecades.length / 2)  // Ajusta o número de linhas conforme necessário
+    };
+
+    // Aumentar o preenchimento para criar mais espaço entre os polaroids
+    const padding = 30;
+    const contentTopMargin = 100;  // Reduzir a margem superior
+    const contentHeight = canvasHeight - contentTopMargin - 50;  // Deixar espaço para o rodapé
+
+    // Aumentar o tamanho dos polaroids
     const cellWidth = (canvasWidth - padding * (grid.cols + 1)) / grid.cols;
     const cellHeight = contentHeight / grid.rows;
 
-    //Calcula as dimensões do polaroid para caber dentro da célula com uma margem
-    const polaroidAspectRatio = 1.2; // A altura do polaroid é 1.2 vezes a largura
-    const maxPolaroidWidth = cellWidth * 0.95; // Use mais da largura da célula
-    const maxPolaroidHeight = cellHeight * 0.9;
-
-    let polaroidWidth = maxPolaroidWidth;
+    // Ajustar a proporção do polaroid
+    const polaroidAspectRatio = 1.2;  // Ligeiramente mais alto que largo
+    let polaroidWidth = cellWidth * 0.95;  // Usar mais da largura da célula
     let polaroidHeight = polaroidWidth * polaroidAspectRatio;
 
-    if (polaroidHeight > maxPolaroidHeight) {
-        polaroidHeight = maxPolaroidHeight;
+    // Garantir que o polaroid caiba na altura da célula
+    if (polaroidHeight > cellHeight * 0.9) {
+        polaroidHeight = cellHeight * 0.9;
         polaroidWidth = polaroidHeight / polaroidAspectRatio;
     }
 
+    // Ajustar o contêiner da imagem dentro do polaroid
     const imageContainerWidth = polaroidWidth * 0.9;
-    const imageContainerHeight = imageContainerWidth; //Área de foto clássica
+    const imageContainerHeight = imageContainerWidth * 0.8;  // Mais largo que alto
+    
+    // Calcular o deslocamento horizontal para centralizar
+    const horizontalOffset = (canvasWidth - (polaroidWidth * grid.cols + padding * (grid.cols - 1))) / 2;
 
     // Inverte a ordem de desenho: desenhe as linhas inferiores primeiro para que as linhas superiores sejam renderizadas em cima
     const reversedImages = [...imagesWithDecades].reverse();
@@ -88,8 +95,8 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
         const row = Math.floor(index / grid.cols);
         const col = index % grid.cols;
 
-        // Calcula o canto superior esquerdo do polaroid dentro de sua célula de grade
-        const x = padding + (cellWidth + padding) * col + (cellWidth - polaroidWidth) / 2;
+        // Calcula a posição do canto superior esquerdo do polaroid com o deslocamento horizontal
+        const x = col * (polaroidWidth + padding) + padding + horizontalOffset;
         const y = contentTopMargin + cellHeight * row + (cellHeight - polaroidHeight) / 2;
         
         ctx.save();
