@@ -11,7 +11,7 @@ import Footer from './components/Footer';
 
 //const DECADES = ['1840', '1880', '1900', '1920', '1940', '1960', '1970', '1980', '1990', '2000', '2020', '2040'];
 //const DECADES = ['1500', '1740','1920', '1950', '1960', '1970', '1980', '1990','2000'];
-const DECADES = ['1950', '1960','1970', '1980', '1990','2000'];
+const DECADAS = ['1940', '1960','1970','1990'];
 
 // Posições otimizadas para 12 fotos em 4 linhas de 3 colunas
 const POSITIONS = [
@@ -112,13 +112,13 @@ function App() {
         setAppState('generating');
         
         const initialImages: Record<string, GeneratedImage> = {};
-        DECADES.forEach(decade => {
+        DECADAS.forEach(decade => {
             initialImages[decade] = { status: 'pending' };
         });
         setGeneratedImages(initialImages);
 
         const concurrencyLimit = 2; // Processar duas décadas por vez
-        const decadesQueue = [...DECADES];
+        const decadesQueue = [...DECADAS];
 
         const processDecade = async (decade: string) => {
             try {
@@ -219,7 +219,7 @@ function App() {
                     return acc;
                 }, {} as Record<string, string>);
 
-            if (Object.keys(imageData).length < DECADES.length) {
+            if (Object.keys(imageData).length < DECADAS.length) {
                 alert("Por favor, aguarde todas as imagens terminarem de serem geradas antes de baixar o álbum.");
                 return;
             }
@@ -310,7 +310,7 @@ function App() {
                      <>
                         {isMobile ? (
                             <div className="w-full max-w-sm flex-1 overflow-y-auto mt-4 space-y-8 p-4">
-                                {DECADES.map((decade) => (
+                                {DECADAS.map((decade) => (
                                     <div key={decade} className="flex justify-center">
                                          <PolaroidCard
                                             caption={decade}
@@ -326,7 +326,7 @@ function App() {
                             </div>
                         ) : (
                             <div ref={dragAreaRef} className="relative w-full max-w-5xl h-[600px] mt-4">
-                                {DECADES.map((decade, index) => {
+                                {DECADAS.map((decade, index) => {
                                     const { top, left, rotate } = POSITIONS[index];
                                     return (
                                         <motion.div
@@ -369,7 +369,7 @@ function App() {
                                         {isDownloading ? 'Criar o Album...' : 'Criar o Album'}
                                     </button>
                                     <button onClick={handleReset} className={secondaryButtonClasses}>
-                                        Começar de novo
+                                        Novo
                                     </button>
                                 </div>
                             )}
