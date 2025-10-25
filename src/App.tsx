@@ -171,7 +171,7 @@ function App() {
 
         // Chamar o serviço de geração para a década específica
         try {
-            const prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
+            const prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person claramente.`;
             const resultUrl = await generateDecadeImage(uploadedImage, prompt);
             setGeneratedImages(prev => ({
                 ...prev,
@@ -309,8 +309,7 @@ function App() {
                 {(appState === 'generating' || appState === 'results-shown') && (
                      <>
                         {isMobile ? (
-                            <div className="w-full max-w-sm flex-1 overflow-y-auto mt-4 space-y-8 p-4">
-                                {DECADAS.map((decade) => (
+                            <div className="w-full max-w-sm flex-1 overflow-y-auto mt-4 space-y-8 p-4">\n                                {DECADAS.map((decade) => (
                                     <div key={decade} className="flex justify-center">
                                          <PolaroidCard
                                             caption={decade}
