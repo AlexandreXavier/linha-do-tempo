@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { PostHogProvider } from 'posthog-js/react';
+import { Analytics } from "@vercel/analytics/react";
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -25,6 +26,7 @@ root.render(
       }}
     >
       <App />
+      <Analytics />
     </PostHogProvider>
   </React.StrictMode>
 );
