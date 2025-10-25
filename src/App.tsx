@@ -309,7 +309,7 @@ function App() {
                 {(appState === 'generating' || appState === 'results-shown') && (
                      <>
                         {isMobile ? (
-                            <div className="w-full max-w-sm flex-1 overflow-y-auto mt-4 space-y-8 p-4">\n                                {DECADAS.map((decade) => (
+                            <div className="w-full max-w-sm flex-1 overflow-y-auto mt-4 space-y-8 p-4">                              {DECADAS.map((decade) => (
                                     <div key={decade} className="flex justify-center">
                                          <PolaroidCard
                                             caption={decade}
@@ -341,9 +341,9 @@ function App() {
                                             }}
                                             transition={{ type: 'spring', stiffness: 100, damping: 20, delay: index * 0.15 }}
                                         >
+
                                             <PolaroidCard 
-                                                // In App.tsx, when using the ref
-                                                dragConstraintsRef={dragAreaRef as React.RefObject<HTMLElement>}
+                                            dragConstraintsRef={dragAreaRef as React.RefObject<HTMLElement>}
                                                 caption={decade}
                                                 status={generatedImages[decade]?.status || 'pending'}
                                                 imageUrl={generatedImages[decade]?.url}
@@ -351,7 +351,7 @@ function App() {
                                                 onShake={handleRegenerateDecade}
                                                 onDownload={handleDownloadIndividualImage}
                                                 isMobile={isMobile}
-                                            />
+                                                />
                                         </motion.div>
                                     );
                                 })}
