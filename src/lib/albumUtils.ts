@@ -9,7 +9,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
         // Configure crossOrigin para operações de canvas, mesmo com URLs de dados
         img.crossOrigin = 'anonymous';
         img.onload = () => resolve(img);
-        img.onerror = (_err) => reject(new Error(`Failed to load image: ${src.substring(0, 50)}...`));
+        img.onerror = (_err) => reject(new Error(`Falha ao carregar imagem: ${src.substring(0, 50)}...`));
         img.src = src;
     });
 }
@@ -29,7 +29,7 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
     
     const ctx = canvas.getContext('2d');
     if (!ctx) {
-        throw new Error('Could not get 2D canvas context');
+        throw new Error('Não foi possível obter o contexto 2D do canvas');
     }
 
     // 1. Desenha o fundo da página do álbum
@@ -126,21 +126,29 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
         // Remover a sombra para desenhar subsequentemente
         ctx.shadowColor = 'transparent';
         
-        // Calcula as dimensões da imagem para caber dentro da área do container mantendo a proporção
+        // Calcula as dimensões da imagem para preencher melhor o container
         const aspectRatio = img.naturalWidth / img.naturalHeight;
-        let drawWidth = imageContainerWidth;
+        
+        // Aumentar o tamanho da imagem para preencher mais o container
+        const scale = 1.2; // Fator de escala para aumentar a imagem
+        let drawWidth = imageContainerWidth * scale;
         let drawHeight = drawWidth / aspectRatio;
 
-        if (drawHeight > imageContainerHeight) {
-            drawHeight = imageContainerHeight;
+        // Se a altura ultrapassar o container, ajusta pela altura
+        if (drawHeight > imageContainerHeight * scale) {
+            drawHeight = imageContainerHeight * scale;
             drawWidth = drawHeight * aspectRatio;
         }
 
-        // Calcula a posição para centralizar a imagem dentro da área do container
+        // Calcula a posição para a imagem, deslocando para baixo
         const imageAreaTopMargin = (polaroidWidth - imageContainerWidth) / 2;
-        const imageContainerY = -polaroidHeight / 2 + imageAreaTopMargin;
+        // Aumenta o deslocamento vertical para baixar a imagem (aumentado de 0.5 para 0.6)
+        const verticalOffset = polaroidHeight * 0.1;
+        const imageContainerY = -polaroidHeight / 2 + imageAreaTopMargin + verticalOffset;
         
-        const imgX = -drawWidth / 2; // Centraliza horizontalmente devido à tradução do contexto
+        // Centraliza a imagem horizontalmente e ajusta o posicionamento vertical
+        const imgX = -drawWidth / 2;
+        // Remove o ajuste negativo e mantém o alinhamento vertical central
         const imgY = imageContainerY + (imageContainerHeight - drawHeight) / 2;
         
         ctx.drawImage(img, imgX, imgY, drawWidth, drawHeight);
@@ -151,7 +159,8 @@ export async function createAlbumPage(imageData: Record<string, string>): Promis
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        const captionAreaTop = imageContainerY + imageContainerHeight;
+        // Ajusta a posição vertical do texto para ficar mais abaixo na moldura
+        const captionAreaTop = -polaroidHeight / 2 + polaroidHeight * 0.85; // Aumentado de 0.8 para 0.85
         const captionAreaBottom = polaroidHeight / 2;
         const captionY = captionAreaTop + (captionAreaBottom - captionAreaTop) / 2;
 
