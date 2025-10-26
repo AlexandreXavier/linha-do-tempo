@@ -11,7 +11,7 @@ import Footer from './components/Footer';
 
 //const DECADES = ['1840', '1880', '1900', '1920', '1940', '1960', '1970', '1980', '1990', '2000', '2020', '2040'];
 //const DECADES = ['1500', '1740','1920', '1950', '1960', '1970', '1980', '1990','2000'];
-const DECADAS = ['1940', '1960','1970','1990'];
+const DECADAS = ['1940', '1960','1970'];
 
 // Posições otimizadas para 12 fotos em 4 linhas de 3 colunas
 const POSITIONS = [
