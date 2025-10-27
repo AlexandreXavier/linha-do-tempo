@@ -11,7 +11,7 @@ interface YearDropdownProps {
 export function YearDropdown({ 
   selectedYears = [], 
   onYearChange, 
-  years = ['1900','1920','1940','1950','1960','1970','1980','1990','2000','2020'],
+  years = ['1840','1900','1920','1940','1950','1960','1970','1980','1990','2000','2020'],
   className = '',
   maxSelections = 4
 }: YearDropdownProps) {
