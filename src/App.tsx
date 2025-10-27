@@ -3,15 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 import { useState, type ChangeEvent, useRef, useEffect } from 'react';
+import { YearDropdown } from './components/YearDropdown';
 import { motion } from 'framer-motion';
 import { generateDecadeImage } from './services/geminiService';
 import PolaroidCard from './components/PolaroidCard';
 import { createAlbumPage } from './lib/albumUtils';
 import Footer from './components/Footer';
 
-//const DECADES = ['1840', '1880', '1900', '1920', '1940', '1960', '1970', '1980', '1990', '2000', '2020', '2040'];
-//const DECADES = ['1500', '1740','1920', '1950', '1960', '1970', '1980', '1990','2000'];
-const DECADAS = ['1940', '1960','1970'];
+const DECADAS = ['1900','1920','1940','1950','1960','1970','1980','1990','2000','2020'];
 
 // Posições otimizadas para 12 fotos em 4 linhas de 3 colunas
 const POSITIONS = [
@@ -85,11 +84,11 @@ const useMediaQuery = (query: string) => {
 function App() {
     const [uploadedImage, setUploadedImage] = useState<string | null>(null);
     const [generatedImages, setGeneratedImages] = useState<Record<string, GeneratedImage>>({});
-    const [_isLoading, setIsLoading] = useState<boolean>(false);
     const [isDownloading, setIsDownloading] = useState<boolean>(false);
     const [appState, setAppState] = useState<'idle' | 'image-uploaded' | 'generating' | 'results-shown'>('idle');
     const isMobile = useMediaQuery('(max-width: 768px)');
     const dragAreaRef = useRef<HTMLDivElement>(null);
+    const [selectedYears, setSelectedYears] = useState<string[]>([]);
 
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -106,50 +105,38 @@ function App() {
     };
 
     const handleGenerateClick = async () => {
-        if (!uploadedImage) return;
+        if (!uploadedImage || selectedYears.length === 0) return;
 
-        setIsLoading(true);
         setAppState('generating');
         
+        // Initialize all selected years as pending
         const initialImages: Record<string, GeneratedImage> = {};
-        DECADAS.forEach(decade => {
-            initialImages[decade] = { status: 'pending' };
+        selectedYears.forEach(year => {
+            initialImages[year] = { status: 'pending' };
         });
-        setGeneratedImages(initialImages);
+        setGeneratedImages(prev => ({ ...prev, ...initialImages }));
 
-        const concurrencyLimit = 2; // Processar duas décadas por vez
-        const decadesQueue = [...DECADAS];
-
-        const processDecade = async (decade: string) => {
+        // Process each selected year
+        for (const year of selectedYears) {
             try {
-                const prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
+                const prompt = `Reimagine the person in this photo in the style of the ${year}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
                 const resultUrl = await generateDecadeImage(uploadedImage, prompt);
                 setGeneratedImages(prev => ({
                     ...prev,
-                    [decade]: { status: 'done', url: resultUrl },
+                    [year]: { status: 'done', url: resultUrl },
                 }));
-            } catch (err) {
-                const errorMessage = err instanceof Error ? err.message : "Um erro inesperado ocorreu.";
+            } catch (error) {
+                console.error(`Error generating image for ${year}:`, error);
                 setGeneratedImages(prev => ({
                     ...prev,
-                    [decade]: { status: 'error', error: errorMessage },
+                    [year]: { 
+                        status: 'error', 
+                        error: 'Failed to generate image. Please try again.' 
+                    }
                 }));
-                console.error(`Falha ao gerar imagem para ${decade}:`, err);
             }
-        };
-
-        const workers = Array(concurrencyLimit).fill(null).map(async () => {
-            while (decadesQueue.length > 0) {
-                const decade = decadesQueue.shift();
-                if (decade) {
-                    await processDecade(decade);
-                }
-            }
-        });
-
-        await Promise.all(workers);
-
-        setIsLoading(false);
+        }
+        
         setAppState('results-shown');
     };
 
@@ -246,8 +233,17 @@ function App() {
             <div className="absolute top-0 left-0 w-full h-full opacity-5" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' /%3E%3C/filter%3E%3Crect width=\'100\' height=\'100\' fill=\'%235A4A3E\' filter=\'url(%23noise)\' /%3E%3C/svg%3E")'}}></div>
             
             <div className="z-10 flex flex-col items-center justify-center w-full h-full flex-1 min-h-0">
-                <div className="text-center mb-10">
-                    <h1 className="text-6xl md:text-8xl font-caveat font-bold text-[#5A4A3E]">Linha do Tempo</h1>
+                <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-10 w-full px-4">
+                    <h1 className="text-6xl md:text-8xl font-caveat font-bold text-[#5A4A3E] text-center md:text-left">Viagem á</h1>
+                    <div className="mt-4 md:mt-0">
+                        <YearDropdown 
+                            selectedYears={selectedYears}
+                            onYearChange={setSelectedYears}
+                            years={DECADAS}
+                            className="text-xl min-w-[200px]"
+                            maxSelections={4}
+                        />
+                    </div>
                 </div>
 
                 {appState === 'idle' && (
@@ -309,9 +305,10 @@ function App() {
                 {(appState === 'generating' || appState === 'results-shown') && (
                      <>
                         {isMobile ? (
-                            <div className="w-full max-w-sm flex-1 overflow-y-auto mt-4 space-y-8 p-4">                              {DECADAS.map((decade) => (
+                            <div className="w-full max-w-sm flex-1 overflow-y-auto mt-4 space-y-8 p-4">
+                                {selectedYears.map((decade) => (
                                     <div key={decade} className="flex justify-center">
-                                         <PolaroidCard
+                                        <PolaroidCard
                                             caption={decade}
                                             status={generatedImages[decade]?.status || 'pending'}
                                             imageUrl={generatedImages[decade]?.url}
@@ -325,8 +322,9 @@ function App() {
                             </div>
                         ) : (
                             <div ref={dragAreaRef} className="relative w-full max-w-5xl h-[600px] mt-4">
-                                {DECADAS.map((decade, index) => {
-                                    const { top, left, rotate } = POSITIONS[index];
+                                {selectedYears.map((decade, index) => {
+                                    const positionIndex = DECADAS.indexOf(decade) % POSITIONS.length;
+                                    const { top, left, rotate } = POSITIONS[positionIndex];
                                     return (
                                         <motion.div
                                             key={decade}
@@ -339,16 +337,23 @@ function App() {
                                                 y: 0,
                                                 rotate: `${rotate}deg`,
                                             }}
-                                            transition={{ type: 'spring', stiffness: 100, damping: 20, delay: index * 0.15 }}
+                                            transition={{ 
+                                                type: 'spring', 
+                                                stiffness: 100, 
+                                                damping: 20, 
+                                                delay: index * 0.15 
+                                            }}
+                                            drag
+                                            dragConstraints={dragAreaRef}
+                                            whileTap={{ scale: 0.95, rotate: 0 }}
+                                            whileHover={{ zIndex: 10, scale: 1.05 }}
                                         >
-
                                             <PolaroidCard 
-                                            dragConstraintsRef={dragAreaRef as React.RefObject<HTMLElement>}
                                                 caption={decade}
                                                 status={generatedImages[decade]?.status || 'pending'}
                                                 imageUrl={generatedImages[decade]?.url}
                                                 error={generatedImages[decade]?.error}
-                                                onShake={handleRegenerateDecade}
+                                                onShake={() => handleRegenerateDecade(decade)}
                                                 onDownload={handleDownloadIndividualImage}
                                                 isMobile={isMobile}
                                                 />
